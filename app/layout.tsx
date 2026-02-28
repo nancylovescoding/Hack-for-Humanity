@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -25,9 +26,39 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 antialiased`}
       >
-        {children}
+        <div className="min-h-screen">
+          <header className="border-b border-gray-200 bg-white">
+            <nav className="mx-auto flex max-w-6xl flex-wrap gap-3 px-6 py-4">
+              <Link
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                href="/posts"
+              >
+                Marketplace Posts
+              </Link>
+              <Link
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                href="/groupbuys"
+              >
+                Group Buys
+              </Link>
+              <Link
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                href="/profile"
+              >
+                Profile
+              </Link>
+              <Link
+                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                href="/messages"
+              >
+                Messages
+              </Link>
+            </nav>
+          </header>
+          {children}
+        </div>
       </body>
     </html>
   );

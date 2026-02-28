@@ -25,6 +25,12 @@ export default function Home() {
         >
           Profile
         </Link>
+        <Link
+          className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+          href="/messages"
+        >
+          Messages
+        </Link>
       </div>
     </main>
   );

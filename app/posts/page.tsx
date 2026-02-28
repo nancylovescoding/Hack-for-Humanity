@@ -1,71 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
-type PostType = "Selling" | "Looking For";
-
-type Post = {
-  id: number;
-  type: PostType;
-  status: "Active" | "Sold";
-  title: string;
-  category: string;
-  price: string;
-  description: string;
-  createdAt: string;
-};
-
-type PostForm = {
-  type: PostType;
-  status: "Active" | "Sold";
-  title: string;
-  category: string;
-  price: string;
-  description: string;
-};
+import {
+  initialPostForm,
+  initialPosts,
+  Post,
+  PostForm,
+  postsStorageKey,
+  PostType,
+  postCategories,
+} from "./posts-data";
 
 type TypeFilter = "All" | PostType;
 type StatusFilter = "All" | "Active" | "Sold";
 
-const storageKey = "marketplace-posts";
-
-const initialPosts: Post[] = [
-  {
-    id: 1,
-    type: "Selling",
-    status: "Active",
-    title: "Jujutsu Kaisen Acrylic Stand",
-    category: "Anime Goods",
-    price: "18",
-    description: "Like-new acrylic stand from a convention booth.",
-    createdAt: "2026-02-28T09:00:00.000Z",
-  },
-  {
-    id: 2,
-    type: "Looking For",
-    status: "Active",
-    title: "Original Doujinshi Artbook",
-    category: "Doujin",
-    price: "25",
-    description: "Looking for a clean copy with local meetup preferred.",
-    createdAt: "2026-02-28T10:00:00.000Z",
-  },
-];
-
-const initialForm: PostForm = {
-  type: "Selling",
-  status: "Active",
-  title: "",
-  category: "Anime Goods",
-  price: "",
-  description: "",
-};
-
-const categories = ["Anime Goods", "Doujin", "K-pop", "Fan Art", "Other"];
-
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [form, setForm] = useState<PostForm>(initialForm);
+  const [form, setForm] = useState<PostForm>(initialPostForm);
   const [message, setMessage] = useState("");
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
@@ -73,7 +25,7 @@ export default function PostsPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
   useEffect(() => {
-    const savedPosts = window.localStorage.getItem(storageKey);
+    const savedPosts = window.localStorage.getItem(postsStorageKey);
 
     if (!savedPosts) {
       return;
@@ -85,12 +37,12 @@ export default function PostsPage() {
         setPosts(parsedPosts);
       }
     } catch {
-      window.localStorage.removeItem(storageKey);
+      window.localStorage.removeItem(postsStorageKey);
     }
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(storageKey, JSON.stringify(posts));
+    window.localStorage.setItem(postsStorageKey, JSON.stringify(posts));
   }, [posts]);
 
   function handleChange(
@@ -134,7 +86,7 @@ export default function PostsPage() {
       setPosts((current) =>
         current.map((post) => (post.id === editingPostId ? updatedPost : post)),
       );
-      setForm(initialForm);
+      setForm(initialPostForm);
       setEditingPostId(null);
       setMessage("Post updated on this browser.");
       return;
@@ -162,7 +114,7 @@ export default function PostsPage() {
     }
 
     setPosts((current) => [nextPost, ...current]);
-    setForm(initialForm);
+    setForm(initialPostForm);
     setMessage("Post published on this browser.");
   }
 
@@ -182,21 +134,21 @@ export default function PostsPage() {
   function handleDeletePost(postId: number) {
     setPosts((current) => current.filter((post) => post.id !== postId));
     if (editingPostId === postId) {
-      setForm(initialForm);
+      setForm(initialPostForm);
       setEditingPostId(null);
     }
     setMessage("Post deleted from this browser.");
   }
 
   function handleCancelEdit() {
-    setForm(initialForm);
+    setForm(initialPostForm);
     setEditingPostId(null);
     setMessage("Edit cancelled.");
   }
 
   function handleResetPosts() {
     setPosts(initialPosts);
-    window.localStorage.removeItem(storageKey);
+    window.localStorage.removeItem(postsStorageKey);
     setEditingPostId(null);
     setMessage("Posts reset to the starter list.");
   }
@@ -300,7 +252,7 @@ export default function PostsPage() {
               onChange={handleChange}
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 outline-none transition focus:border-black"
             >
-              {categories.map((category) => (
+              {postCategories.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -459,6 +411,12 @@ export default function PostsPage() {
 
                 {isAdminMode ? (
                   <div className="flex gap-3 pt-2">
+                    <Link
+                      href={`/posts/${post.id}`}
+                      className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                    >
+                      View
+                    </Link>
                     <button
                       type="button"
                       onClick={() => handleEditPost(post)}
@@ -474,7 +432,14 @@ export default function PostsPage() {
                       Delete
                     </button>
                   </div>
-                ) : null}
+                ) : (
+                  <Link
+                    href={`/posts/${post.id}`}
+                    className="inline-block rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                  >
+                    View Details
+                  </Link>
+                )}
               </div>
             </article>
           ))}

@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold">Hack for Humanity</h1>
+      <h1 className="text-3xl font-bold">Fandom Hub</h1>
       <p className="mt-2 text-gray-600">Choose a section:</p>
 
       <div className="mt-6 flex gap-3 flex-wrap">

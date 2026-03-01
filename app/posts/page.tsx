@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   initialPostForm,
   initialPosts,
+  normalizePost,
   Post,
   PostForm,
   postsStorageKey,
@@ -23,27 +25,36 @@ export default function PostsPage() {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
+  const [hasLoadedPosts, setHasLoadedPosts] = useState(false);
 
   useEffect(() => {
     const savedPosts = window.localStorage.getItem(postsStorageKey);
 
     if (!savedPosts) {
+      setHasLoadedPosts(true);
       return;
     }
 
     try {
-      const parsedPosts = JSON.parse(savedPosts) as Post[];
+      const parsedPosts = (JSON.parse(savedPosts) as Array<Partial<Post> & Pick<Post, "id">>)
+        .map(normalizePost);
       if (Array.isArray(parsedPosts) && parsedPosts.length > 0) {
         setPosts(parsedPosts);
       }
     } catch {
       window.localStorage.removeItem(postsStorageKey);
+    } finally {
+      setHasLoadedPosts(true);
     }
   }, []);
 
   useEffect(() => {
+    if (!hasLoadedPosts) {
+      return;
+    }
+
     window.localStorage.setItem(postsStorageKey, JSON.stringify(posts));
-  }, [posts]);
+  }, [posts, hasLoadedPosts]);
 
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -67,6 +78,7 @@ export default function PostsPage() {
         title: form.title.trim(),
         category: form.category,
         price: form.price.trim(),
+        imageUrl: form.imageUrl.trim(),
         description: form.description.trim(),
         createdAt:
           posts.find((post) => post.id === editingPostId)?.createdAt ??
@@ -99,6 +111,7 @@ export default function PostsPage() {
       title: form.title.trim(),
       category: form.category,
       price: form.price.trim(),
+      imageUrl: form.imageUrl.trim(),
       description: form.description.trim(),
       createdAt: new Date().toISOString(),
     };
@@ -125,6 +138,7 @@ export default function PostsPage() {
       title: post.title,
       category: post.category,
       price: post.price,
+      imageUrl: post.imageUrl,
       description: post.description,
     });
     setEditingPostId(post.id);
@@ -279,6 +293,20 @@ export default function PostsPage() {
 
           <label className="block">
             <span className="mb-1 block text-sm font-medium text-gray-700">
+              Image URL
+            </span>
+            <input
+              name="imageUrl"
+              type="url"
+              value={form.imageUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/product-image.jpg"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-gray-700">
               Description
             </span>
             <textarea
@@ -374,8 +402,24 @@ export default function PostsPage() {
           {filteredPosts.map((post) => (
             <article
               key={post.id}
-              className="rounded-2xl border border-gray-200 bg-white shadow-sm"
+              className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
             >
+              <div className="relative h-52 bg-gray-100">
+                {post.imageUrl ? (
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-sm text-gray-500">
+                    No image provided
+                  </div>
+                )}
+              </div>
+
               <div className="space-y-3 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>

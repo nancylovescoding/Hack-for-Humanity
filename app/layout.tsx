@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -30,7 +31,24 @@ export default function RootLayout({
       >
         <div className="min-h-screen">
           <header className="border-b border-gray-200 bg-white">
-            <nav className="mx-auto flex max-w-6xl flex-wrap gap-3 px-6 py-4">
+            <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 py-4">
+              <Link
+                className="mr-2 flex items-center gap-3 rounded-xl border border-gray-300 px-3 py-2 text-gray-700 transition hover:bg-gray-50"
+                href="/"
+                aria-label="Back to home"
+                title="Home"
+              >
+                <Image
+                  src="/hack_logo.png"
+                  alt="Fandom Hub logo"
+                  width={34}
+                  height={34}
+                  className="rounded-md object-cover"
+                />
+                <span className="text-sm font-semibold text-gray-900">
+                  Home
+                </span>
+              </Link>
               <Link
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 href="/posts"
@@ -45,15 +63,15 @@ export default function RootLayout({
               </Link>
               <Link
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                href="/profile"
-              >
-                Profile
-              </Link>
-              <Link
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                 href="/messages"
               >
                 Messages
+              </Link>
+              <Link
+                className="ml-auto rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                href="/profile"
+              >
+                Profile
               </Link>
             </nav>
           </header>

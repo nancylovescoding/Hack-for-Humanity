@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   activeUserStorageKey,
 } from "../../messages/messages-data";
-import { initialPosts, Post, postsStorageKey } from "../posts-data";
+import { initialPosts, normalizePost, Post, postsStorageKey } from "../posts-data";
 
 export default function PostDetailPage() {
   const params = useParams<{ id: string }>();
@@ -19,7 +20,9 @@ export default function PostDetailPage() {
 
     if (savedPosts) {
       try {
-        currentPosts = JSON.parse(savedPosts) as Post[];
+        currentPosts = (
+          JSON.parse(savedPosts) as Array<Partial<Post> & Pick<Post, "id">>
+        ).map(normalizePost);
       } catch {
         window.localStorage.removeItem(postsStorageKey);
       }
@@ -68,6 +71,22 @@ export default function PostDetailPage() {
       </div>
 
       <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="relative mb-6 h-80 overflow-hidden rounded-2xl bg-gray-100">
+          {post.imageUrl ? (
+            <Image
+              src={post.imageUrl}
+              alt={post.title}
+              fill
+              sizes="(min-width: 1024px) 896px, 100vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-sm text-gray-500">
+              No image provided
+            </div>
+          )}
+        </div>
+
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <div className="mb-2 flex gap-2">

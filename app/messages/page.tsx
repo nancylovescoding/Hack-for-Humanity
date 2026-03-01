@@ -36,6 +36,7 @@ export default function MessagesPage() {
   const [activeUser, setActiveUser] = useState<DemoUserId>("buyer");
   const [draft, setDraft] = useState("");
   const [message, setMessage] = useState("");
+  const [hasLoadedStore, setHasLoadedStore] = useState(false);
 
   useEffect(() => {
     const nextStore = getInitialStore();
@@ -52,6 +53,8 @@ export default function MessagesPage() {
     if (savedUser && savedUser in demoUsers) {
       setActiveUser(savedUser);
     }
+
+    setHasLoadedStore(true);
   }, []);
 
   useEffect(() => {
@@ -93,8 +96,12 @@ export default function MessagesPage() {
   }, [searchParams]);
 
   useEffect(() => {
+    if (!hasLoadedStore) {
+      return;
+    }
+
     window.localStorage.setItem(messagesStorageKey, JSON.stringify(store));
-  }, [store]);
+  }, [store, hasLoadedStore]);
 
   useEffect(() => {
     if (activeThreadId !== null) {

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -7,6 +8,7 @@ import {
   getGroupBuyStatus,
   groupBuysStorageKey,
   initialGroupBuys,
+  normalizeGroupBuy,
 } from "./groupbuys-data";
 
 export default function GroupBuysPage() {
@@ -21,7 +23,9 @@ export default function GroupBuysPage() {
     }
 
     try {
-      const parsedGroupBuys = JSON.parse(savedGroupBuys) as GroupBuy[];
+      const parsedGroupBuys = (
+        JSON.parse(savedGroupBuys) as Array<Partial<GroupBuy> & Pick<GroupBuy, "id">>
+      ).map(normalizeGroupBuy);
       if (Array.isArray(parsedGroupBuys) && parsedGroupBuys.length > 0) {
         setGroupBuys(parsedGroupBuys);
       }
@@ -118,50 +122,68 @@ export default function GroupBuysPage() {
           return (
             <article
               key={groupBuy.id}
-              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+              className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
             >
-              <div className="mb-4 flex items-start justify-between gap-4">
-                <div>
-                  <span className="mb-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
-                    {groupBuy.category}
+              <div className="relative h-60 bg-gray-100">
+                {groupBuy.imageUrl ? (
+                  <Image
+                    src={groupBuy.imageUrl}
+                    alt={groupBuy.title}
+                    fill
+                    sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-sm text-gray-500">
+                    No image provided
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-1 flex-col p-5">
+                <div className="mb-4 flex items-start justify-between gap-4">
+                  <div>
+                    <span className="mb-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
+                      {groupBuy.category}
+                    </span>
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      {groupBuy.title}
+                    </h2>
+                  </div>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                      status === "Open"
+                        ? "bg-green-100 text-green-700"
+                        : status === "Full"
+                          ? "bg-amber-100 text-amber-700"
+                          : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {status}
                   </span>
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {groupBuy.title}
-                  </h2>
                 </div>
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>
+                    Participants: {groupBuy.currentParticipants}/{groupBuy.targetParticipants}
+                  </p>
+                  <p>Deadline: {formatDate(groupBuy.deadline)}</p>
+                  <p>{groupBuy.notes}</p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleJoin(groupBuy.id)}
+                  disabled={status !== "Open"}
+                  className={`mt-auto w-full rounded-xl px-4 py-3 text-sm font-medium transition ${
                     status === "Open"
-                      ? "bg-green-100 text-green-700"
-                      : status === "Full"
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-red-100 text-red-700"
+                      ? "bg-black text-white hover:bg-gray-800"
+                      : "cursor-not-allowed bg-gray-200 text-gray-500"
                   }`}
                 >
-                  {status}
-                </span>
+                  {status === "Open" ? "Join" : status === "Full" ? "Full" : "Closed"}
+                </button>
               </div>
-
-              <div className="space-y-2 text-sm text-gray-600">
-                <p>
-                  Participants: {groupBuy.currentParticipants}/{groupBuy.targetParticipants}
-                </p>
-                <p>Deadline: {formatDate(groupBuy.deadline)}</p>
-                <p>{groupBuy.notes}</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleJoin(groupBuy.id)}
-                disabled={status !== "Open"}
-                className={`mt-5 w-full rounded-xl px-4 py-3 text-sm font-medium transition ${
-                  status === "Open"
-                    ? "bg-black text-white hover:bg-gray-800"
-                    : "cursor-not-allowed bg-gray-200 text-gray-500"
-                }`}
-              >
-                {status === "Open" ? "Join" : status === "Full" ? "Full" : "Closed"}
-              </button>
             </article>
           );
         })}

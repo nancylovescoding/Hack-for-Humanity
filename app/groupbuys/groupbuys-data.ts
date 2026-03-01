@@ -2,6 +2,7 @@ export type GroupBuy = {
   id: number;
   title: string;
   category: string;
+  imageUrl: string;
   targetParticipants: number;
   currentParticipants: number;
   deadline: string;
@@ -12,6 +13,7 @@ export type GroupBuy = {
 export type GroupBuyForm = {
   title: string;
   category: string;
+  imageUrl: string;
   targetParticipants: string;
   deadline: string;
   notes: string;
@@ -30,6 +32,7 @@ export const groupBuyCategories = [
 export const initialGroupBuyForm: GroupBuyForm = {
   title: "",
   category: "Anime Goods",
+  imageUrl: "",
   targetParticipants: "",
   deadline: "",
   notes: "",
@@ -40,6 +43,7 @@ export const initialGroupBuys: GroupBuy[] = [
     id: 1,
     title: "Frieren Acrylic Stand Bundle",
     category: "Anime Goods",
+    imageUrl: "/Frieren.jpg",
     targetParticipants: 5,
     currentParticipants: 3,
     deadline: "2026-03-10",
@@ -48,8 +52,9 @@ export const initialGroupBuys: GroupBuy[] = [
   },
   {
     id: 2,
-    title: "Event-Only Doujin Anthology",
+    title: "Gintama Doujin Doll",
     category: "Doujin",
+    imageUrl: "/Gintama.jpg",
     targetParticipants: 4,
     currentParticipants: 4,
     deadline: "2026-03-05",
@@ -58,8 +63,9 @@ export const initialGroupBuys: GroupBuy[] = [
   },
   {
     id: 3,
-    title: "Ateez Lightstick Bulk Order",
+    title: "Seventeen Lightstick Bulk Order",
     category: "K-pop",
+    imageUrl: "/Seventeen.jpg",
     targetParticipants: 6,
     currentParticipants: 2,
     deadline: "2026-02-20",
@@ -81,4 +87,20 @@ export function getGroupBuyStatus(groupBuy: GroupBuy): "Open" | "Full" | "Closed
   }
 
   return "Open";
+}
+
+export function normalizeGroupBuy(
+  groupBuy: Partial<GroupBuy> & Pick<GroupBuy, "id">,
+): GroupBuy {
+  return {
+    id: groupBuy.id,
+    title: groupBuy.title ?? "",
+    category: groupBuy.category ?? "Other",
+    imageUrl: groupBuy.imageUrl ?? "",
+    targetParticipants: groupBuy.targetParticipants ?? 0,
+    currentParticipants: groupBuy.currentParticipants ?? 0,
+    deadline: groupBuy.deadline ?? "",
+    notes: groupBuy.notes ?? "",
+    createdAt: groupBuy.createdAt ?? new Date().toISOString(),
+  };
 }

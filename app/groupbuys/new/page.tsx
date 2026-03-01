@@ -51,6 +51,7 @@ export default function NewGroupBuyPage() {
       id: Date.now() + Math.floor(Math.random() * 1000),
       title: trimmedTitle,
       category: form.category,
+      imageUrl: form.imageUrl.trim(),
       targetParticipants,
       currentParticipants: 1,
       deadline: form.deadline,
@@ -143,6 +144,20 @@ export default function NewGroupBuyPage() {
               value={form.targetParticipants}
               onChange={handleChange}
               placeholder="5"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-gray-700">
+              Image URL
+            </span>
+            <input
+              name="imageUrl"
+              type="url"
+              value={form.imageUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/group-buy-image.jpg"
               className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-black"
             />
           </label>

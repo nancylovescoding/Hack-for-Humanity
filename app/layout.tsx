@@ -26,10 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen">
+          <div
+            aria-hidden="true"
+            className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/sub_bg.jpg')" }}
+          />
           <header className="absolute inset-x-0 top-0 z-20">
             <nav className="flex items-center justify-between px-6 py-6">
               <div className="flex flex-wrap items-center gap-3">

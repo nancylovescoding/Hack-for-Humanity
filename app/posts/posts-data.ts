@@ -30,26 +30,38 @@ export const initialPosts: Post[] = [
     id: 1,
     type: "Selling",
     status: "Active",
-    title: "Jujutsu Kaisen Acrylic Stand",
-    category: "Anime Goods",
+    title: "Enhypen album",
+    category: "K-pop",
     price: "18",
     imageUrl:
-      "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80",
-    description: "Like-new acrylic stand from a convention booth.",
+      "/album.jpg",
+    description: "Selling second hand Enhypen album.",
     createdAt: "2026-02-28T09:00:00.000Z",
   },
   {
     id: 2,
+    type: "Selling",
+    status: "Active",
+    title: "Demon Slayer set",
+    category: "Anime Goods",
+    price: "25",
+    imageUrl:
+      "/demon_slayer.jpg",
+    description: "Completely new demon slayer set includes: badges & coloured paper.",
+    createdAt: "2026-02-28T10:00:00.000Z",
+  },
+  {
+    id: 3,
     type: "Looking For",
     status: "Active",
-    title: "Original Doujinshi Artbook",
+    title: "Harry Potter EVERGREEN Doujin Book",
     category: "Doujin",
     price: "25",
     imageUrl:
-      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&w=1200&q=80",
-    description: "Looking for a clean copy with local meetup preferred.",
+      "/harry_potter.jpg",
+    description: "Looking for a clean copy.",
     createdAt: "2026-02-28T10:00:00.000Z",
-  },
+  }
 ];
 
 export const initialPostForm: PostForm = {

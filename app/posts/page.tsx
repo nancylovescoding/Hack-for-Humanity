@@ -402,7 +402,7 @@ export default function PostsPage() {
           {filteredPosts.map((post) => (
             <article
               key={post.id}
-              className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
+              className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
             >
               <div className="relative h-52 bg-gray-100">
                 {post.imageUrl ? (
@@ -420,7 +420,7 @@ export default function PostsPage() {
                 )}
               </div>
 
-              <div className="space-y-3 p-4">
+              <div className="flex flex-1 flex-col space-y-3 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <span className="mb-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-700">
@@ -454,7 +454,7 @@ export default function PostsPage() {
                 </p>
 
                 {isAdminMode ? (
-                  <div className="flex gap-3 pt-2">
+                  <div className="mt-auto flex gap-3 pt-2">
                     <Link
                       href={`/posts/${post.id}`}
                       className="rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
@@ -479,7 +479,7 @@ export default function PostsPage() {
                 ) : (
                   <Link
                     href={`/posts/${post.id}`}
-                    className="inline-block rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                    className="mt-auto inline-block self-start rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
                   >
                     View Details
                   </Link>

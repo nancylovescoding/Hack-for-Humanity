@@ -30,52 +30,54 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 antialiased`}
       >
         <div className="min-h-screen">
-          <header className="border-b border-gray-200 bg-white">
-            <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 py-4">
+          <header className="absolute inset-x-0 top-0 z-20">
+            <nav className="flex items-center justify-between px-6 py-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  className="flex items-center gap-3 rounded-xl bg-white/85 px-4 py-3 text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  href="/"
+                  aria-label="Back to home"
+                  title="Home"
+                >
+                  <Image
+                    src="/hack_logo.png"
+                    alt="Fandom Hub logo"
+                    width={38}
+                    height={38}
+                    className="rounded-md object-cover"
+                  />
+                  <span className="text-base font-semibold text-gray-900">
+                    Home
+                  </span>
+                </Link>
+                <Link
+                  className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  href="/posts"
+                >
+                  Marketplace Posts
+                </Link>
+                <Link
+                  className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  href="/groupbuys"
+                >
+                  Group Buys
+                </Link>
+                <Link
+                  className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  href="/messages"
+                >
+                  Messages
+                </Link>
+              </div>
               <Link
-                className="mr-2 flex items-center gap-3 rounded-xl border border-gray-300 px-3 py-2 text-gray-700 transition hover:bg-gray-50"
-                href="/"
-                aria-label="Back to home"
-                title="Home"
-              >
-                <Image
-                  src="/hack_logo.png"
-                  alt="Fandom Hub logo"
-                  width={34}
-                  height={34}
-                  className="rounded-md object-cover"
-                />
-                <span className="text-sm font-semibold text-gray-900">
-                  Home
-                </span>
-              </Link>
-              <Link
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                href="/posts"
-              >
-                Marketplace Posts
-              </Link>
-              <Link
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                href="/groupbuys"
-              >
-                Group Buys
-              </Link>
-              <Link
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                href="/messages"
-              >
-                Messages
-              </Link>
-              <Link
-                className="ml-auto rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
                 href="/profile"
               >
                 Profile
               </Link>
             </nav>
           </header>
-          {children}
+          <div className="pt-24">{children}</div>
         </div>
       </body>
     </html>

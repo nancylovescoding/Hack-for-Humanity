@@ -1,6 +1,9 @@
 export default function Home() {
   return (
-    <main className="flex min-h-[calc(100vh-73px)] items-center justify-center px-6">
+    <main
+      className="-mt-24 flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat px-6 pt-24"
+      style={{ backgroundImage: "url('/background.jpg')" }}
+    >
       <div className="text-center">
         <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl">
           Fandom Hub

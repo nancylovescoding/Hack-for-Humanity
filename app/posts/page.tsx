@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import {
   initialPostForm,
@@ -18,6 +19,7 @@ type TypeFilter = "All" | PostType;
 type StatusFilter = "All" | "Active" | "Sold";
 
 export default function PostsPage() {
+  const searchParams = useSearchParams();
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [form, setForm] = useState<PostForm>(initialPostForm);
   const [message, setMessage] = useState("");
@@ -26,6 +28,7 @@ export default function PostsPage() {
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [hasLoadedPosts, setHasLoadedPosts] = useState(false);
+  const searchQuery = searchParams.get("q")?.trim().toLowerCase() ?? "";
 
   useEffect(() => {
     const savedPosts = window.localStorage.getItem(postsStorageKey);
@@ -180,7 +183,12 @@ export default function PostsPage() {
     const matchesType = typeFilter === "All" || post.type === typeFilter;
     const matchesStatus =
       statusFilter === "All" || post.status === statusFilter;
-    return matchesType && matchesStatus;
+    const matchesSearch =
+      !searchQuery ||
+      post.title.toLowerCase().includes(searchQuery) ||
+      post.category.toLowerCase().includes(searchQuery) ||
+      post.description.toLowerCase().includes(searchQuery);
+    return matchesType && matchesStatus && matchesSearch;
   });
 
   return (
@@ -360,6 +368,11 @@ export default function PostsPage() {
             <p className="mt-2 text-sm text-gray-600">
               Filter by post type and status.
             </p>
+            {searchQuery ? (
+              <p className="mt-1 text-sm text-gray-500">
+                Search results for "{searchParams.get("q")}"
+              </p>
+            ) : null}
           </div>
           <p className="text-sm text-gray-600">{posts.length} total posts</p>
         </div>

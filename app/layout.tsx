@@ -72,12 +72,22 @@ export default function RootLayout({
                   Messages
                 </Link>
               </div>
-              <Link
-                className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
-                href="/profile"
-              >
-                Profile
-              </Link>
+              <div className="flex items-center gap-3">
+                <form action="/posts" className="flex items-center">
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search posts"
+                    className="w-56 rounded-lg bg-white/85 px-4 py-3 text-base text-gray-700 shadow-sm backdrop-blur-sm outline-none transition placeholder:text-gray-500 focus:bg-white"
+                  />
+                </form>
+                <Link
+                  className="rounded-lg bg-white/85 px-5 py-3 text-base font-medium text-gray-700 shadow-sm backdrop-blur-sm transition hover:bg-white"
+                  href="/profile"
+                >
+                  Profile
+                </Link>
+              </div>
             </nav>
           </header>
           <div className="pt-24">{children}</div>
